@@ -8,6 +8,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import java.util.List;
+import javax.persistence.EntityManager;
+import models.Message;
+import utils.DBUtil;
 /**
  * Servlet implementation class indexServlet
  */
@@ -26,9 +30,14 @@ public class indexServlet extends HttpServlet {
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
-	}
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        EntityManager em = DBUtil.createEntityManager();
 
+        List<Message> messages = em.createNamedQuery("getAllMessages", Message.class).getResultList();
+        response.getWriter().append(Integer.valueOf(messages.size()).toString());
+
+        em.close();
+    }
 }
+
+	
